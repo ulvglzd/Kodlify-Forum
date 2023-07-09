@@ -1,4 +1,4 @@
-# Kodlify
+# Kodlify - DEMO
 ## A local forum website where users can find solutions to their technical questions
 
 ### Video Demo:  <https://www.youtube.com/watch?v=LawmxaThN6U>
@@ -8,7 +8,6 @@ Recently, I noticed that there are so many programming groups and communities on
 Most of them cannot use stackoverflow and other identical discussion forums because of lacking english language skills.
 So I decided to create a forum website to gather all of the groups and communities in one place.
 I created a forum website for azerbaijani coding community where users can register, login, ask questions (posts), answer questions, up(like) posts, make connections, manage their account and etc.
-
 
 
 #### Technologies used and application structure
