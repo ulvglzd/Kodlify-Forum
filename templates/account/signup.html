@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+
+{% block head_title %}{% trans "Qedyiyyat" %}{% endblock %}
+
+{% block content %}
+<h1>{% trans "Qeydiyyat" %}</h1>
+
+<p>{% blocktrans %}Artıq qeydiyyatdan keçmisinizsə, zəhmət olmazsa <a href="{{ login_url }}">daxil olun</a>.{% endblocktrans %}</p>
+
+
+<div class="ui grid">
+  <div class="eight wide column"> 
+    <form class="signup ui form" id="signup_form" method="post" action="{% url 'account_signup' %}">
+      {% csrf_token %}
+      {{ form.as_p }}
+      {% if redirect_field_value %}
+      <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+      {% endif %}
+      <button class="ui button teal" type="submit">{% trans "Qedy olun" %} &raquo;</button>
+    </form>
+  </div>
+</div>
+
+{% endblock %}

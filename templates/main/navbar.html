@@ -1,0 +1,61 @@
+{% url 'posts:post-view' as path_to_posts %}
+{% url 'accounts:my-account-view' as path_to_my_account %}
+{% url 'accounts:my-invitations-view' as path_to_my_invitations %}
+{% url 'accounts:all-accounts-view' as path_to_all_accounts %}   
+{% load static %}
+    
+    
+
+<div class="ui inverted menu nav mb-7">
+    <div class="ui container">
+      <a href="{{path_to_posts}}" class="{% if request.path == path_to_posts %}active{% endif %} item">
+          <img class="ui tiny image" src="{% static 'logo/kodlify.png' %}">
+      </a>
+     
+  
+      <div class="right menu">
+        {% if request.user.is_authenticated %}
+        <a href="{{path_to_posts}}" class="{% if request.path == path_to_posts %}active{% endif %} item"> 
+            Əsas səhifə
+        </a>
+        {% endif %}
+          {% if request.user.is_authenticated %}
+          <div class="item">
+              <div class="ui floating dropdown icon button teal" id="ddfriends"> Əlaqələr
+                  <i class="dropdown icon" ></i>
+                  <div class="menu">
+                      <a href="{{path_to_all_accounts}}" class="{% if request.path == path_to_all_accounts %}active{% endif %} item">
+                          Bütün hesablar
+                      </a>
+                      <a href="{{path_to_my_invitations}}" class="{% if request.path == path_to_my_invitations %}active{% endif %} item">
+                          Gələn təkliflər
+                      </a>
+                  </div>
+               </div>
+          </div>
+               <div class="item">
+                <form action="" method="GET">
+                  <div class="ui action left icon input">
+                  <input class="prompt" type="text" name='q' placeholder="Hesabın adı..">
+                  <i class="search icon"></i>
+                  <button type='submit' class="ui button">Axtar</button>
+                  </div>
+              </form>
+              </div>
+          
+              <a href="{{path_to_my_account}}" class="{% if request.path == path_to_my_account %}active{% endif %} item"">
+                    <img src="{{image.url}}" class="ui avatar image">&nbsp;
+                   {{ request.user }}
+              </a>
+  
+              <a href="{% url 'account_logout' %}" class="ui item">
+                  Hesabdan çıx
+              </a>
+          {% else %}
+          <a href="{% url 'account_login' %}" class="ui item">
+                  Daxil ol
+              </a>
+          {% endif %}
+      </div>
+    </div>
+  </div>

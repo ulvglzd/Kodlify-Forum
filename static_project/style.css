@@ -1,0 +1,62 @@
+
+body {
+    background: #f8f8f8 !important;
+}
+
+.nav {
+    border-radius: 0px !important;
+    padding: 10px 0 10px 0 !important;
+    background-color: #00b0ad !important;
+}
+.mb-7 {
+    margin-bottom: 7px !important;
+}
+
+.mt-5 {
+    margin-top: 1px !important;
+}
+
+#ddfriends {
+    background-color: #009794 !important;
+}
+
+.myaccount {
+    height: 300px !important;
+    top: 300px !important;
+    font-size: 20px !important;
+}
+
+.mb-5 {
+    margin-bottom: 5px !important;
+}
+
+.con-btn {
+    width: 200px !important;
+}
+
+.bwhite-lg {
+    background-color: transparent !important;
+}
+
+.bwhite-sm {
+    background-color: transparent !important;
+    width: 10px !important;
+}
+
+
+.answer-box {
+    display: none;
+}
+
+.huge
+{
+    color: rgba(34, 76, 139, 0.953) !important;
+    letter-spacing:5px;
+}
+
+
+
+
+
+
+
