@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}Paylaşımı sil{% endblock title %}
+
+{% block content %}
+
+    {% if messages %}
+        {% for message in messages %}
+            {% if 'warning' in message.tags %}
+                <div class='ui negative message'>
+                    <div class="header">
+                        {{message}}
+                    </div>
+                </div>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+
+    {% if not messages %}
+        <div class="ui segment">
+            <h3>Paylaşımı sil</h3>
+            <form action="" method="POST">
+                {% csrf_token %}
+                <p>Paylaşımı silmək istədiyinizə əminsiniz?</p>
+                <button type="submit" class="ui teal button">Göndər</button>
+            </form>
+        </div>
+    
+    {% endif %}
+
+  
+
+{% endblock content %}

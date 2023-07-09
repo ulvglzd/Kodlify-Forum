@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Hesab məlumatları
+{% endblock title %}
+
+{% block content %}
+    <div class="ui grid">
+        <br>
+        <div class="row">
+            <div class="four wide column">
+                <img class="ui medium rounded image" src={{object.avatar.url}}>
+                <h1>{{object.user}}</h1>
+                <div class="ui vertical fluid menu">
+                    <div class="item">
+                        Paylaşımlar
+                        <div class="ui label">
+                            {{object.get_posts_num}}
+                        </div>
+                    </div>
+                    <div class="item">
+                        Aldığı up'lar
+                        <div class="ui label">
+                            {{object.get_ups_received_num}}
+                        </div>
+                    </div>
+                    <div class="item">
+                        Verdiyi up'lar
+                        <div class="ui label">
+                            {{object.get_ups_given_num}}
+                        </div>
+                    </div>
+                    <div class="item">
+                        Əlaqələr
+                        <div class="ui label">
+                            {{object.friends_number}}
+                        </div>
+                    </div>
+                </div>
+
+                {% if object.user not in con_receiver and object.user not in con_sender %}
+                    <form action="{% url 'accounts:send-invite' %}" method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="account_pk" value={{object.pk}}>
+                        <button type="submit" class="positive ui button mb-5 con-btn"> <i class="plus square icon"></i>Əlaqə yarat</button>
+                    </form>
+                {% endif %}
+
+                {% if object.user in con_receiver and request.user not in object.friends.all %}
+                    <button class="disabled ui button mb-5 con-btn"><i class="user icon"></i>Təsdiq gözlənilir</button>
+                {% endif %}
+
+                    {% comment %} removing connection {% endcomment %}
+                {% if request.user in object.friends.all  %}
+                    <form action="{% url 'accounts:remove-connection' %}" method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="account_pk" value={{object.pk}}>
+                        <button type="submit" class="negative ui button mb-5 con-btn"> <i class="minus square icon"></i>Əlaqəni sil</button>
+                    </form>
+                {% endif %}
+ 
+            </div>
+            <div class="twelve wide column">
+                {% if len_posts %}
+                    {% for post in posts %}
+                        <div class="segment ui fluid">
+                            {{post.content}}
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="segment ui fluid">
+                        <h3>İstifadəçinin paylaşımı yoxdur...</h3>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock content %}

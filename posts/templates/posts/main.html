@@ -1,0 +1,161 @@
+{% extends 'base.html' %}
+
+{% block title %}Əsas səhifə{% endblock title %}
+
+{% block content %}
+<div class="ui grid">
+    <div class="eleven wide column">
+        {% for obj in query %}
+
+        <div class="ui fluid card">
+            <div class="content">
+                <div class="right floated meta">
+                <div class="ui grid">
+                    <div class="row">
+                        {% if request.user == obj.author.user %}
+                            <a href="{% url 'posts:post-update' obj.pk %}"><button class="ui button bwhite-lg ">Redaktə et</button></a>
+                            <a href="{% url 'posts:post-delete' obj.pk %}"><button class="ui button bwhite-lg ">Sil</button></a>
+                        {% endif %}
+                    </div>
+                </div>
+                    
+                </div>
+                <img class="ui avatar image" src={{obj.author.avatar.url}}> 
+                {{ obj.author.user }} - {{ obj.created|timesince}} əvvəl
+            </div>
+            <div class="ui fluid image">
+                {% if obj.image %}
+                    <img src={{obj.image.url}}>
+                {% endif %}
+            </div>
+            <div class="content">
+                <p> {{ obj.content }} </p>
+                <div class="left floated">
+                    <form action="{% url 'posts:up-post-view' %}" method="POST" class='up-form' id='{{obj.id}}'>
+                        {% csrf_token %}
+                        <input type="hidden" name="post_id" value={{obj.id}}>
+                        
+                            <button type="submit" class="ui button up-btn{{obj.id}}">
+                                {% if account not in obj.uped.all %}
+                                    Up
+                                {% else %}
+                                    Unup
+                                {% endif %}
+                            </button>
+                            <div class="ui grid">
+                                <div class="column">
+                                    <div class="up-count{{obj.id}}"> {{obj.num_ups}} </div>
+                                </div>
+                                <div class="column">
+                                    Ups
+                                </div>
+                            </div>
+                            
+                        
+                    </form>
+                </div>
+                <div class="right floated">
+                    <i class="comment icon"></i>
+                    <span> {{ obj.num_answers }} cavablar</span>
+                </div>
+            </div>
+            <div class="extra content">
+                <div class="mb-5">
+                  
+                </div>
+                <button class="answ_btn ui button mb-5"> cavabları göstər / gizlət </button>
+                <div class="answer-box">
+                {% if obj.answer_set.all %}
+                    {% for answer in obj.answer_set.all %}
+                    
+                        <div class="ui segment mb-5">
+                            <img class="ui avatar image" src={{answer.user.avatar.url}}>
+                            <span>{{ answer.user }}</span>
+                            <div class='mt-5'>{{ answer.body }}</div>
+                        </div>
+                    
+                    {% endfor %}
+                {% endif %}
+                </div>
+  
+                <form action="" method="POST"class='ui fluid form'>
+                    {% csrf_token %}
+                    <input type="hidden" name="post_id" value={{obj.id}}>
+                    {{ answer_form }}
+                    <button type="submit" name="submit_answer" class="ui positive button mt-5 w-full">Göndər</button>
+                </form>
+            </div>
+        </div>
+
+
+        {% endfor %}
+    </div>
+    <div class="five wide column">
+        <div class="ui segment">
+            {% if posted %}
+                <div class="ui green message">Paylaşım əlavə edildi</div>
+            {% endif %}
+            <form action="" method="POST" class='ui form' enctype="multipart/form-data">
+                {% csrf_token %}
+                {{post_form}}
+                <button type='submit' name="submit_post" class="ui positive button w-full mt-5">Göndər</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block scripts %} 
+    <script>
+        $( document ).ready(function() {
+            let display = false
+            $(".answ_btn").click(function () {
+                if (display===false) {
+                    $(this).next(".answer-box").show("slow");
+                    display=true
+                } else {
+                    $(this).next(".answer-box").hide("slow");
+                    display=false
+                }  
+            });
+
+            $('.up-form').submit(function(e){
+                e.preventDefault()
+                
+                const post_id = $(this).attr('id')
+                
+                const upText = $(`.up-btn${post_id}`).text()
+                const trim = $.trim(upText)
+
+                const url = $(this).attr('action')
+
+                let res;
+                const ups = $(`.up-count${post_id}`).text()
+                const trimCount = parseInt(ups)
+                
+                $.ajax ({
+                    type: 'POST',
+                    url: url,
+                    data: {
+                        'csrfmiddlewaretoken':$('input[name=csrfmiddlewaretoken]').val(),
+                        'post_id':post_id,
+                    },
+                    success: function(response){
+                        if(trim === 'Unup') {
+                            $(`.up-btn${post_id}`).text('Up')
+                            res = trimCount -1
+                        } else {
+                            $(`.up-btn${post_id}`).text('Unup')
+                            res = trimCount + 1
+                        }
+                        $(`.up-count${post_id}`).text(res)
+                    },
+                    error: function(response) {
+                        console.log('error', response)
+                    }
+                })
+
+            })
+        });
+    </script>
+{% endblock scripts %}

@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block title %}
+My invitations
+{% endblock title %}
+
+{% block content %}
+    {% if is_empty %}
+        <div class="ui segment">
+            <h3>Gözləyən təklif yoxdur</h3>
+        </div>
+    {% endif %}
+    
+    {% for obj in query %}
+        <div class="ui segment">
+            <div class="ui grid">
+                <div class="row">
+                    <div class="three wide column">
+                        <img class="ui small circular image" src="{{obj.avatar.url}}">
+                    </div>
+                    <div class="thirteen wide column">
+                        <h3>{{obj.user}}</h3>
+                        <p>{{obj.bio}}</p>
+                        <a href="{{obj.get_absolute_url}}"> 
+                            <button class="ui teal button con-btn mb-5">Profilə bax</button>
+                        </a>
+                        <form action="{% url 'accounts:confirm-invite' %}" method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" name="account_pk" value={{obj.pk}}>
+                            <button type="submit" class="positive ui button con-btn mb-5">
+                                <i class="check icon"> </i>
+                                Qəbul et
+                            </button>
+                        </form>
+                        <form action="{% url 'accounts:decline-invite' %}" method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" name="account_pk" value={{obj.pk}}>
+                            <button type="submit" class="negative ui button con-btn mb-5">
+                                <i class="close icon"> </i>
+                                Geri çevir
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+    
+{% endblock content %}

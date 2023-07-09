@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Mənim profilim
+{% endblock title %}
+
+{% block content %}
+
+<!-- MODAL-->
+<div class="ui modal myaccount">
+    <i class="close icon"></i>
+    <div class="header">
+      Hesabını redaktə et
+    </div>
+    <div class="image content">
+      <div class="ui medium image">
+        <img src="{{account.avatar.url}}">
+      </div>
+      <div class="description">
+        <div class="ui header">Öz məlumatlarını paylaş</div>
+        <form action="" method="POST" class="ui form" enctype='multipart/form-data'>
+          
+            
+            {% csrf_token %}
+            {{form.as_p}}
+          
+        
+      </div>
+    </div>
+    <div class="actions">
+      <button type='submit' class="ui positive right labeled icon button">
+        Yenilə
+        <i class="checkmark icon"></i>
+      </button>
+    </form>
+    </div>
+  </div>
+
+
+
+<div class="ui segment">
+    {% if approve %}
+    <div class="ui violet message">Hesabınız uğurla yeniləndi!</div>
+    {% endif %}
+    <h3>Mənim hesabım: {{request.user}} </h3>
+    <div class="ui grid">
+    <div class="row">
+        <div class="six wide column">
+          <img class="ui medium rounded image" src={{account.avatar.url}}>
+          <br>
+          <div class="row mt-5">
+            <button class="ui teal button" id="model-button">Hesabını redakət et</button>
+          </div>
+        </div>
+        <div class="ten wide column ">
+          <table class="ui table ">
+            <tbody>
+              <tr>
+                <td>İstifadəçi adı</td>
+                <td>{{account.user}}</td>
+              </tr>
+              <tr>
+                <td>Ad</td>
+                <td>{{account.first_name}}</td>
+              </tr>
+              <tr>
+                <td>Soyad</td>
+                <td>{{account.last_name}}</td>
+              </tr>
+              <tr>
+                <td>Bioqrafiya</td>
+                <td>{{account.bio}}</td>
+              </tr>
+              <tr>
+                <td>Əlaqələrin sayı</td>
+                <td>{{account.friends_number}}</td>
+              </tr>
+              <tr>
+                <td>Paylaşımların sayı</td>
+                <td>{{account.get_posts_num}}</td>
+              </tr>
+              <tr>
+                <td>Verilən up'ların sayı</td>
+                <td>{{account.get_ups_given_num}}</td>
+              </tr>
+              <tr>
+                <td>Qəbul edilən up'ların sayı</td>
+                <td>{{account.get_ups_received_num}}</td>
+              </tr>
+
+              
+
+              
+            </tbody>
+          </table>
+        </div>
+      </div>
+  </div>
+</div>
+
+
+
+{% endblock content %}

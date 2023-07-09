@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Bütün hesablar
+{% endblock title %}
+
+{% block content %}
+    {% if is_empty %}
+        <h1>Əlaqə yaratmaq üçün hesab mövcud deyil...</h1>
+    {% endif %}
+    
+    {% for obj in object_list %}
+        <div class="ui segment">
+            <div class="ui grid">
+                <div class="row">
+                    <div class="three wide column">
+                        <img class="ui small circular image" src={{obj.avatar.url}}>
+                    </div>
+                    <div class="thirteen wide column">
+                        <h3>{{obj.user}}</h3>
+                        <p>{{obj.bio}}</p>
+                        <a href={{obj.get_absolute_url}}><button class="ui teal button mb-5 con-btn">Profilə bax</button></a>
+                        <br>
+                        {% comment %} adding connection {% endcomment %}
+                        {% if obj.user not in con_receiver and obj.user not in con_sender %}
+                            <form action="{% url 'accounts:send-invite' %}" method="POST">
+                                {% csrf_token %}
+                                <input type="hidden" name="account_pk" value={{obj.pk}}>
+                                <button type="submit" class="positive ui button mb-5 con-btn"> <i class="plus square icon"></i>Əlaqə yarat</button>
+                            </form>
+                        {% endif %}
+
+                        {% if obj.user in con_receiver and request.user not in obj.friends.all %}
+                        <button class="disabled ui button mb-5 con-btn"><i class="user icon"></i>Təsdiq gözlənilir</button>
+                        {% endif %}
+
+                        {% comment %} removing connection {% endcomment %}
+                        {% if request.user in obj.friends.all  %}
+                            <form action="{% url 'accounts:remove-connection' %}" method="POST">
+                                {% csrf_token %}
+                                <input type="hidden" name="account_pk" value={{obj.pk}}>
+                                <button type="submit" class="negative ui button mb-5 con-btn"> <i class="minus square icon"></i>Əlaqəni sil</button>
+                            </form>
+                        {% endif %}
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    
+    {% endfor %}
+
+{% endblock content %}
